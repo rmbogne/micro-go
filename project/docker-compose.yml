@@ -20,6 +20,24 @@ services:
       mode: replicated
       replicas: 1
 
+  mailer-service:
+    build:
+      context: ./../mailer-service
+      dockerfile: ./../mailer-service/mailer-service.dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      EMAIL_DOMAIN: localhost
+      EMAIL_HOST: mailhog
+      EMAIL_PORT: 1025
+      EMAIL_ENCRYPTION: none
+      EMAIL_USERNAME: ""
+      EMAIL_PASSWORD: ""
+      FROM_NAME: "Romuald MBOGNE"
+      FROM_ADDRESS: "romuald.mbogne@example.com"
+
   authentication-service:
     build:
       context: ./../authentication-service
@@ -58,3 +76,9 @@ services:
       MONGO_INITDB_PASSWORD: password
     volumes:
       - ./db-data/mongo/:/data/db
+
+  mailhog:
+    image: 'jcalonso/mailhog:latest'
+    ports:
+      - "1025:1025"
+      - "8025:8025"
