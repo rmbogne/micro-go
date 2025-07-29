@@ -38,6 +38,14 @@ services:
       FROM_NAME: "Romuald MBOGNE"
       FROM_ADDRESS: "romuald.mbogne@example.com"
 
+  listener-service:
+    build:
+      context: ./../listener-service
+      dockerfile: ./../listener-service/listener-service.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+
   authentication-service:
     build:
       context: ./../authentication-service
@@ -82,3 +90,11 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  rabbitmq:
+    image: 'rabbitmq:4.0-alpine'
+    ports:
+      - "5672:5672"
+    deploy:
+      mode: replicated
+      replicas: 1

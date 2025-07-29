@@ -1,6 +1,7 @@
 package main
 
 import (
+	"maps"
 	"encoding/json"
 	"errors"
 	"io"
@@ -41,9 +42,7 @@ func (app *Config) writeJSON(w http.ResponseWriter, status int, data any, header
 	}
 
 	if len(headers) > 0 {
-		for key, value := range headers[0] {
-			w.Header()[key] = value
-		}
+		maps.Copy(w.Header(), headers[0])
 	}
 
 	w.Header().Set("Content-Type", "application/json")
