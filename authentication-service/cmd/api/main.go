@@ -15,6 +15,7 @@ import (
 )
 
 const webPort = "80"
+
 var counts int64
 
 type Config struct {
@@ -32,7 +33,7 @@ func main() {
 	}
 	//set up config
 	app := Config{
-		DB: conn,
+		DB:     conn,
 		Models: data.New(conn),
 	}
 
@@ -49,6 +50,7 @@ func main() {
 }
 
 func openDB(dsn string) (*sql.DB, error) {
+	log.Println(dsn)
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err
@@ -65,11 +67,13 @@ func openDB(dsn string) (*sql.DB, error) {
 
 func connectToDB() *sql.DB {
 	dsn := os.Getenv("DSN")
+	log.Println(dsn)
 
 	for {
 		connection, err := openDB(dsn)
 		if err != nil {
 			log.Println("Postgres not yet ready ...")
+			log.Println(dsn)
 			counts += 1
 		} else {
 			log.Println("Connected to Postgres !")
@@ -78,10 +82,11 @@ func connectToDB() *sql.DB {
 
 		if counts > 10 {
 			log.Println(err)
-			return  nil
+			return nil
 		}
 
 		log.Println("Backing off for two seconds...")
+		log.Println(dsn)
 		time.Sleep(2 * time.Second)
 		continue
 	}
