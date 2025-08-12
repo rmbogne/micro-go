@@ -45,7 +45,7 @@ func main() {
 	err := srv.ListenAndServe()
 	if err != nil {
 		log.Panic(err)
-		return
+		//return
 	}
 }
 
@@ -74,7 +74,7 @@ func connectToDB() *sql.DB {
 		if err != nil {
 			log.Println("Postgres not yet ready ...")
 			log.Println(dsn)
-			counts += 1
+			counts++
 		} else {
 			log.Println("Connected to Postgres !")
 			return connection
@@ -86,7 +86,6 @@ func connectToDB() *sql.DB {
 		}
 
 		log.Println("Backing off for two seconds...")
-		log.Println(dsn)
 		time.Sleep(2 * time.Second)
 		continue
 	}
